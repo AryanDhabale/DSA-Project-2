@@ -83,6 +83,7 @@ public class DoublyLinkedList<T extends Comparable<T>> {
             currentPos = currentPos.getNext();
         }
         return count;
+        //very funny comments
     };
 
     public void print(){
