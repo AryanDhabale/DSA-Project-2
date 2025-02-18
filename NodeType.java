@@ -1,4 +1,3 @@
-import java.lang.Comparable;
 
 public class NodeType<T extends Comparable<T>> { 
     public T info; 
