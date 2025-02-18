@@ -13,8 +13,8 @@ public class DoublyLinkedList<T extends Comparable<T>> {
     public void insertItem(T item) {
         NodeType<T> addedNode = new NodeType<T>(item);
         //Inserts at the head if list is empty or is before first item
-        if (head == null || head.getInfo().compareTo(item) >= 0) {
-            if (head != null && head.getInfo().compareTo(item) == 0) {
+        if (head == null || head.info.compareTo(item) >= 0) {
+            if (head != null && head.info.compareTo(item) == 0) {
                 System.out.println("Sorry. You cannot insert the duplicate item");
                 return;
             }
@@ -24,26 +24,23 @@ public class DoublyLinkedList<T extends Comparable<T>> {
         //Checks for each element in list to find an item that is greater than item, and
         //inserts right before it
         currentPos = head;
-        while (currentPos.getNext() != null) {
-            if (currentPos.getNext().getInfo().compareTo(item) == 0) {
+        while (currentPos.next != null) {
+            if (currentPos.next.info.compareTo(item) == 0) {
                 System.out.println("Sorry. You cannot insert the duplicate item");
-                resetList();
                 return;
             }
-            if (currentPos.getNext().getInfo().compareTo(item) > 0) {
+            if (currentPos.next.info.compareTo(item) > 0) {
                 addedNode.next = currentPos.next;
                 currentPos.next = addedNode;
                 addedNode.back = currentPos;
                 addedNode.next.back = addedNode;
-                System.out.println("back node: " + addedNode.back);
-                resetList();
                 return;
             }
-            currentPos = currentPos.getNext();
+            currentPos = currentPos.next;
         }       
         //If no item greater than "item" is found, insert at the end of the list
-        currentPos.setNext(addedNode);
-        addedNode.setBack(currentPos);
+        currentPos.next = addedNode;
+        addedNode.back = currentPos;
         resetList();
     }
 
@@ -53,28 +50,27 @@ public class DoublyLinkedList<T extends Comparable<T>> {
             return;
         } 
         // Remove element from head if the item is at head
-        if (head.getInfo().compareTo(item) == 0) {
-            head = head.getNext();
+        if (head.info.compareTo(item) == 0) {
+            head = head.next;
             if (head != null) {
-                head.setBack(null);
+                head.back = null;
             }
             return;
         }
         currentPos = head;
         while (currentPos != null) {
-            if (currentPos.getInfo().compareTo(item) == 0) {
+            if (currentPos.info.compareTo(item) == 0) {
                 // If currentPos is not the tail, update the next node's back pointer.
-                if (currentPos.getNext() != null) {
-                    currentPos.getNext().setBack(currentPos.getBack());
+                if (currentPos.next != null) {
+                    currentPos.next.back = currentPos.back;
                 }
                 // Update the previous node's next pointer.
-                currentPos.getBack().setNext(currentPos.getNext());
-                currentPos.setBack(null);
-                currentPos.setNext(null);
-                resetList();
+                currentPos.back.next = currentPos.next;
+                currentPos.back = null;
+                currentPos.next = null;
                 return;
             }
-            currentPos = currentPos.getNext();
+            currentPos = currentPos.next;
         }
         System.out.println("Item not found");
         resetList();
@@ -83,9 +79,9 @@ public class DoublyLinkedList<T extends Comparable<T>> {
     public int length() {
         currentPos = head;
         int count = 0;
-        while (currentPos.getNext() != null) {
+        while (currentPos.next != null) {
             count++;
-            currentPos = currentPos.getNext();
+            currentPos = currentPos.next;
         }
         return count;
     }
@@ -147,25 +143,9 @@ public class DoublyLinkedList<T extends Comparable<T>> {
 
         while (currentPos != null) {
             temp = currentPos.next;
-            
-            System.out.println("BEFORE CHANGES");
-            System.out.println("node value: " + currentPos.info);
-            System.out.println("node ID: " + currentPos);
-            System.out.println("next node: " + currentPos.next);
-            System.out.println("prev node: " + currentPos.back);
-            
-
-
             currentPos.next = currentPos.back;
             currentPos.back = temp;
 
-
-            System.out.println("AFTER CHANGES");
-            System.out.println("node value: " + currentPos.info);
-            System.out.println("next node: " + currentPos.next);
-            System.out.println("prev node: " + currentPos.back);
-            System.out.println("\n");
-            
             currentPos = currentPos.back;
             
             if (temp != null) {
@@ -201,7 +181,6 @@ public class DoublyLinkedList<T extends Comparable<T>> {
             temp.next = currentPos;
             temp.back = currentPos.back;
             currentPos.back = temp;
-
 
             currentPos = currentPos.next;
         }
