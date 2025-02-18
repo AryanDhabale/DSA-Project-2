@@ -137,7 +137,6 @@ public class DoublyLinkedList<T extends Comparable<T>> {
 
     public void reverseList() {
         if (head == null) return;
-
         NodeType<T> temp = null;
         currentPos = head;
 
