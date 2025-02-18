@@ -11,6 +11,7 @@ public class DoublyLinkedList<T extends Comparable<T>> {
     };
 
     public void insertItem(T item) {
+        NodeType<T> addedNode = new NodeType<T>(item);
         //Inserts at the head if list is empty or is before first item
         if (head == null || head.getInfo().compareTo(item) >= 0) {
             if (head != null && head.getInfo().compareTo(item) == 0) {
@@ -30,18 +31,19 @@ public class DoublyLinkedList<T extends Comparable<T>> {
                 return;
             }
             if (currentPos.getNext().getInfo().compareTo(item) > 0) {
-                NodeType<T> addedNode = new NodeType<T>(item);
-                addedNode.setNext(currentPos.getNext());
-                currentPos.setNext(addedNode);
-                addedNode.setBack(currentPos);
-                addedNode.getNext().setBack(addedNode);
+                addedNode.next = currentPos.next;
+                currentPos.next = addedNode;
+                addedNode.back = currentPos;
+                addedNode.next.back = addedNode;
+                System.out.println("back node: " + addedNode.back);
                 resetList();
                 return;
             }
             currentPos = currentPos.getNext();
         }       
         //If no item greater than "item" is found, insert at the end of the list
-        currentPos.setNext(new NodeType<T>(item,null));
+        currentPos.setNext(addedNode);
+        addedNode.setBack(currentPos);
         resetList();
     }
 
@@ -91,7 +93,7 @@ public class DoublyLinkedList<T extends Comparable<T>> {
     public void print() {
         currentPos = head;
         while (currentPos != null) {
-            System.out.print(currentPos.info + " ");
+            System.out.println(currentPos.info + " ");
             currentPos = currentPos.next;
         }
         System.out.println();
@@ -146,12 +148,35 @@ public class DoublyLinkedList<T extends Comparable<T>> {
         while (currentPos != null) {
             temp = currentPos.next;
             
-        }
-        
-        if (temp != null) {
-            head = temp.back;
+            System.out.println("BEFORE CHANGES");
+            System.out.println("node value: " + currentPos.info);
+            System.out.println("node ID: " + currentPos);
+            System.out.println("next node: " + currentPos.next);
+            System.out.println("prev node: " + currentPos.back);
+            
+
+
+            currentPos.next = currentPos.back;
+            currentPos.back = temp;
+
+
+            System.out.println("AFTER CHANGES");
+            System.out.println("node value: " + currentPos.info);
+            System.out.println("next node: " + currentPos.next);
+            System.out.println("prev node: " + currentPos.back);
+            System.out.println("\n");
+            
+            currentPos = currentPos.back;
+            
+            if (temp != null) {
+                head = temp;
+            }
         }
     }
+        
+        
+
+
 
     public void swapAlternate() {
         if (head == null) return;
