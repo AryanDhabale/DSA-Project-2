@@ -129,6 +129,7 @@ public class DoublyLinkedListDriver {
                             list.print();
                             System.out.print("The modified list: ");
                             list.swapAlternate();
+                            list.print();
                             System.out.print("The reverse list: ");
                             list.printReverse();
                             break;
