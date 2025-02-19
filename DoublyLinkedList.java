@@ -18,7 +18,11 @@ public class DoublyLinkedList<T extends Comparable<T>> {
                 System.out.println("Sorry. You cannot insert the duplicate item");
                 return;
             }
-            head = new NodeType<T>(item, head);
+            addedNode.next = head;
+            if (head != null) { 
+                head.back = addedNode;
+            }
+            head = addedNode;
             return;
         }
         //Checks for each element in list to find an item that is greater than item, and
