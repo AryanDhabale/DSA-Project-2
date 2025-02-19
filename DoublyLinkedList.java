@@ -89,7 +89,7 @@ public class DoublyLinkedList<T extends Comparable<T>> {
     public void print() {
         currentPos = head;
         while (currentPos != null) {
-            System.out.println(currentPos.info + " ");
+            System.out.print(currentPos.info + " ");
             currentPos = currentPos.next;
         }
         System.out.println();

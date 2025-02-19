@@ -17,6 +17,7 @@ public class DoublyLinkedListDriver {
         Scanner userScanner = new Scanner(System.in);
         String fileName = args[0];
         DoublyLinkedList list = null;
+        int type = 0;
         try (Scanner fileScanner = new Scanner(new File(fileName))) {
             
             try {
@@ -26,6 +27,7 @@ public class DoublyLinkedListDriver {
                 choice = userScanner.nextLine().trim();
                 switch(choice) {
                     case "i": 
+                        type = 1;
                         list = new DoublyLinkedList<Integer>();
                         while(fileScanner.hasNextInt()) {
                             list.insertItem(fileScanner.nextInt());
@@ -33,6 +35,7 @@ public class DoublyLinkedListDriver {
                         fileScanner.close();
                         break;
                     case "d":
+                        type = 2;
                         list = new DoublyLinkedList<Double>();
                         while(fileScanner.hasNextDouble()) {
                             list.insertItem(fileScanner.nextDouble());
@@ -40,6 +43,7 @@ public class DoublyLinkedListDriver {
                         fileScanner.close();
                         break;
                     case "s":
+                        type = 3;
                         list = new DoublyLinkedList<String>();
                         while(fileScanner.hasNext()) {
                             list.insertItem(fileScanner.next());
@@ -55,14 +59,12 @@ public class DoublyLinkedListDriver {
             System.out.println("Commands:\n" +
             "(i) - Insert value\n" +
             "(d) - Delete value\n" +
-            "(s) - Search value\n" +
-            "(n) - Print next iterator value\n" +
-            "(r) - Reset iterator\n" +
-            "(a) - Delete alternate nodes\n" +
-            "(m) - Merge lists\n" +
-            "(t) - Find intersection\n" +
             "(p) - Print list\n" +
-            "(l) - Print length\n" +
+            "(l) - Length\n" +
+            "(t) - Print reverse\n" +
+            "(r) - Reverse list\n" +
+            "(b) - Delete Subsection\n" +
+            "(s) - Swap Alternate\n" +
             "(q) - Quit program");
             String input = "";
 
@@ -70,64 +72,65 @@ public class DoublyLinkedListDriver {
                 try { 
                     System.out.print("Enter a command: ");
                     input = userScanner.nextLine().trim();
-                    int tempInt;
                     switch (input) {
                         case "i":
                             System.out.print("Enter a number to insert: ");
-                            tempInt = userScanner.nextInt();
+                            Comparable toInsert = getValue(userScanner,type);
                             System.out.print("Original List: ");
-                            list.printList();
-                            list.insertItem(new ItemType(tempInt));
+                            list.print();
+                            list.insertItem(toInsert);
                             System.out.print("New List: ");
-                            list.printList();
+                            list.print();
                             userScanner.nextLine();
                             break;
                         case "d":
                             System.out.print("Enter a Number to Delete: ");
-                            tempInt = userScanner.nextInt();
+                            Comparable toDelete = getValue(userScanner,type);
                             System.out.print("Original List: ");
-                            list.printList();
-                            list.deleteItem(new ItemType(tempInt));
+                            list.print();
+                            list.deleteItem(toDelete);
                             System.out.print("New List: ");
-                            list.printList();
+                            list.print();
                             userScanner.nextLine();
-                            break;
-                        case "s":
-                            
-                        case "n":
-                            
-                        case "r":
-
-                        case "a":
-                            System.out.print("Original List: ");
-                            list.printList();
-                            list.deleteAlternateNodes();
-                            System.out.print("Modified List: ");
-                            list.printList();
-                            break;
-                        case "m":
-                            SortedLinkedList list1 = getNewSortedList();
-                            System.out.print("The list 1: ");
-                            list.printList();
-                            System.out.print("The list 2: ");
-                            list1.printList();
-                            list.mergeList(list1);
-                            break;
-                        case "t":
-                            SortedLinkedList list2 = getNewSortedList();
-                            System.out.print("The list 1: ");
-                            list.printList();
-                            System.out.print("The list 2: ");
-                            list2.printList();
-                            System.out.print("Intersection of lists:");
-                            list.intersection(list2);
                             break;
                         case "p":
                             System.out.print("The list is: ");
-                            list.printList();
-                            break;
+                            list.print();
+                            break;    
                         case "l":
-                            System.out.println("The length of the list is: " + list.getLength());
+                            System.out.println("The length of the list is: " + list.length());
+                            break;
+                        case "t":
+                            System.out.print("The reverse list: ");
+                            list.printReverse();
+                            break;  
+                        case "r":
+                            System.out.print("The original list: ");
+                            list.print();
+                            System.out.print("The reversed list: ");
+                            list.reverseList();
+                            list.print();
+                            break;
+                        case "b":
+                            System.out.print("Enter the lower bound: ");
+                            Comparable lowerBound = getValue(userScanner, type);
+                            System.out.print("Enter the upper bound: ");
+                            Comparable upperBound = getValue(userScanner, type);
+                            System.out.print("The original list: ");
+                            list.print();
+                            System.out.print("The modified list: ");
+                            list.deleteSubsection(lowerBound, upperBound);
+                            list.print();
+                            System.out.print("The reverse list: ");
+                            list.printReverse();
+                            break;
+                        case "s":
+                            System.out.print("The original list: ");
+                            list.print();
+                            System.out.print("The modified list: ");
+                            list.swapAlternate();
+                            System.out.print("The reverse list: ");
+                            list.printReverse();
                             break;
                         case "q":
                             System.out.println("Quitting program...");
@@ -145,6 +148,18 @@ public class DoublyLinkedListDriver {
             } catch (FileNotFoundException e) {
                 System.out.println("bad file name");
             } 
+        }
+
+        @SuppressWarnings("unchecked")
+        public static <T> T getValue(Scanner s, int c) {
+            if (c == 1) {
+                return (T) Integer.valueOf(s.nextInt());  
+            } else if (c == 2) {
+                return (T) Double.valueOf(s.nextDouble());  
+            } else if (c == 3) {
+                return (T) s.next(); 
+            }
+            return null;  
         }
     }
     /**
