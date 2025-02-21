@@ -83,7 +83,7 @@ public class DoublyLinkedList<T extends Comparable<T>> {
     public int length() {
         currentPos = head;
         int count = 0;
-        while (currentPos.next != null) {
+        while (currentPos != null) {
             count++;
             currentPos = currentPos.next;
         }
